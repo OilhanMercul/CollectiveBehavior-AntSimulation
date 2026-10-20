@@ -1,11 +1,11 @@
-# CollectiveBehavior-
+# CollectiveBehavior-AntSimulation
 
 ## Authors :
 
 - Moira Grozdanić
 - Raphaël Letourneur @raphltr
 - Oïlhan Mercul @OilhanMercul
-- Ljubiša Milovanović
+- Ljubiša Milovanović @Ljubisa-Milovanovic
 
 ## Starting Point :
 
@@ -17,12 +17,12 @@ With this article is include a codebase of a simulation of ants in Raylib. (expl
 
 ## Plan :
 
-We want to add a higher-level swarm behavior, the path-finding using pheromones. 
-Idea of plan : 
--Understand the way pheromones works
--Conceptualise how we can do that on a computer and how adding it to the actual simulation
--Adding it
--Results
+First, we aim to fully understand the project, reproduce it on our local machines, and modify its parameters. Following this, we will review additional literature regarding pheromone effects, existing simulations of ant pheromone pathfinding, and swarm behavior—including variations based on species and ant size. We will then summarize our findings to select feasible improvements. This work will be completed by the end of the First Report.
+
+Next, we will focus on reproducing or developing a pheromone behavior model. We will then integrate it into our own simulation and begin implementing the selected improvements from the previous phase, which will form the core of the Second Report.
+
+Finally, we will implement various presets corresponding to different ant species, incorporating variations in size and behavior identified in the literature, before preparing the final presentation and Final Report.
+
 
 ## Milestone :
 
