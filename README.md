@@ -2,7 +2,7 @@
 
 ## Authors :
 
-- Moira Grozdanić
+- Moira Grozdanić @moiragrozdanicc
 - Raphaël Letourneur @raphltr
 - Oïlhan Mercul @OilhanMercul
 - Ljubiša Milovanović @Ljubisa-Milovanovic
