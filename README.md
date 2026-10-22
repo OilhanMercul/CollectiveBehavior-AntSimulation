@@ -13,7 +13,7 @@ Our starting point is the following article on ant swarm aggregation dynamics:
 
 > Loges, M., & Weiss, T. (2025). *Simulating Ant Swarm Aggregations Dynamics*. Proceedings of the ACM on Computer Graphics and Interactive Techniques, 8(4), Article 55, 1–16. https://doi.org/10.1145/3747868
 
-With this article is include a codebase of a simulation of ants in Raylib. (explain what is done already : adhesion, viscosity ...)
+This article includes a C++/Raylib codebase designed to simulate 3D ant aggregations using Position-Based Dynamics (PBD). By modifying specific parameters, key mechanics such as surface adhesion and viscosity can be directly adjusted. The work focuses on a fluid dynamics approach, reproducing collective behaviors in specific physical contexts to allow direct comparison between high-density ant swarms and real viscoelastic fluids.
 
 ## Plan :
 
