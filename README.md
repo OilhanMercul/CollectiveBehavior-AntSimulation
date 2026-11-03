@@ -1,11 +1,13 @@
 # CollectiveBehavior-AntSimulation
 
 ## Authors :
+| Name | GitHub |
+|------|--------|
+| Moira Grozdanić | [@moiragrozdanicc](https://github.com/moiragrozdanicc) |
+| Raphaël Letourneur | [@raphltr](https://github.com/raphltr) |
+| Oïlhan Mercul | [@OilhanMercul](https://github.com/OilhanMercul) |
+| Ljubiša Milovanović | [@Ljubisa-Milovanovic](https://github.com/Ljubisa-Milovanovic) |
 
-- Moira Grozdanić @moiragrozdanicc
-- Raphaël Letourneur @raphltr
-- Oïlhan Mercul @OilhanMercul
-- Ljubiša Milovanović @Ljubisa-Milovanovic
 
 ## Starting Point :
 
