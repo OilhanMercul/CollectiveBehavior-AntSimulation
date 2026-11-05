@@ -1,4 +1,6 @@
-# CollectiveBehavior-AntSimulation
+# Pheromone-driven trail formation in a physics-based 3D ant simulator
+
+We extend the Position-Based Dynamics (PBD) ant swarm simulation of Loges & Weiss (2025) by introducing a pheromone field and the experimentally measured steering behavior of Argentine ants described by Perna et al. (2012). Our goal is to investigate how pheromone-based communication produces collective trails and how physical interactions, such as collisions and crowding, influence their formation.
 
 ## Authors :
 | Name | GitHub |
@@ -15,23 +17,45 @@ Our starting point is the following article on ant swarm aggregation dynamics:
 
 > Loges, M., & Weiss, T. (2025). *Simulating Ant Swarm Aggregations Dynamics*. Proceedings of the ACM on Computer Graphics and Interactive Techniques, 8(4), Article 55, 1–16. https://doi.org/10.1145/3747868
 
-This article includes a C++/Raylib codebase designed to simulate 3D ant aggregations using Position-Based Dynamics (PBD). By modifying specific parameters, key mechanics such as surface adhesion and viscosity can be directly adjusted. The work focuses on a fluid dynamics approach, reproducing collective behaviors in specific physical contexts to allow direct comparison between high-density ant swarms and real viscoelastic fluids.
+This article includes a C++/Raylib codebase designed to simulate 3D ant aggregations using Position-Based Dynamics (PBD). The work focuses on a fluid dynamics approach, reproducing collective behaviors in specific physical contexts to allow direct comparison between high-density ant swarms and real viscoelastic fluids.
+To extend the simulation, we use the research of Perna et al. (2012), which experimentally describes how Argentine ants respond to pheromone concentrations. Ants compare pheromone levels on their left and right and adjust their direction accordingly.
 
 ## Plan :
 
-First, we aim to fully understand the project, reproduce it on our local machines, and modify its parameters. Following this, we will review additional literature regarding pheromone effects, existing simulations of ant pheromone pathfinding, and swarm behavior—including variations based on species and ant size. We will then summarize our findings to select feasible improvements. This work will be completed by the end of the First Report.
+Our main objectives are:
 
-Next, we will focus on reproducing or developing a pheromone behavior model. We will then integrate it into our own simulation and begin implementing the selected improvements from the previous phase, which will form the core of the Second Report.
+- Implement a pheromone field with deposition and evaporation.
+- Integrate the pheromone-based steering behavior described by Perna et al. (2012).
+- Simulate trail formation in an open arena.
+- Validate the simulated behavior against the experimental results of Perna et al.
+- Investigate how ant density and physical collisions influence trail formation and stability.
+- Experiments and evaluation
 
-Finally, we will implement various presets corresponding to different ant species, incorporating variations in size and behavior identified in the literature, before preparing the final presentation and Final Report.
+We plan to conduct open-arena experiments to observe trail formation and crowding experiments to investigate how ant density and physical interactions affect trail stability.
 
+If time allows, we will also reproduce a binary-bridge experiment to study path selection between two branches.
+
+Results will be evaluated using ant turning angles, trail formation over time, trail stability, tortuosity, loop formation and the effects of crowding. Experiments will use fixed random seeds to ensure reproducibility.
 
 ## Milestone :
 
-- 13/11 First Report
-- 11/12 Second Report
-- 08/01 Final Report and presentation
+First Report – 13/11/2026
+- Understand and reproduce the original simulator.
+- Review relevant literature on pheromone-based behavior and trail formation.
+- Finalize the implementation approach and experimental plan.
+
+Second Report – 11/12/2026
+- Implement a pheromone field with deposition and evaporation.
+- Integrate the pheromone-based steering behavior.
+- Demonstrate initial trail formation in an open arena.
+
+Final Report – 08/01/2027
+- Complete trail formation experiments.
+- Validate simulated ant behavior against Perna et al.
+- Investigate the effects of ant density and physical collisions on trail formation.
+Analyze and present the results.
 
 ## Links and references : 
 - [Loges, M., & Weiss, T. (2025). *Simulating Ant Swarm Aggregations Dynamics*](https://doi.org/10.1145/3747868)
+- [Perna, A. et al. (2012). Individual rules for trail pattern formation in Argentine ants](https://doi.org/10.1371/journal.pcbi.1002592)
 
