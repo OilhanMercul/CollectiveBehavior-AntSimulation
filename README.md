@@ -39,17 +39,17 @@ Results will be evaluated using ant turning angles, trail formation over time, t
 
 ## Milestone :
 
-First Report – 13/11/2026
+[First Report – 13/11/2026](https://github.com/OilhanMercul/CollectiveBehavior-AntSimulation/milestone/1)
 - Understand and reproduce the original simulator.
 - Review relevant literature on pheromone-based behavior and trail formation.
 - Finalize the implementation approach and experimental plan.
 
-Second Report – 11/12/2026
+[Second Report – 11/12/2026](https://github.com/OilhanMercul/CollectiveBehavior-AntSimulation/milestone/2)
 - Implement a pheromone field with deposition and evaporation.
 - Integrate the pheromone-based steering behavior.
 - Demonstrate initial trail formation in an open arena.
 
-Final Report – 08/01/2027
+[Final Report – 08/01/2027](https://github.com/OilhanMercul/CollectiveBehavior-AntSimulation/milestone/3)
 - Complete trail formation experiments.
 - Validate simulated ant behavior against Perna et al.
 - Investigate the effects of ant density and physical collisions on trail formation.
