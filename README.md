@@ -57,11 +57,7 @@ Analyze and present the results.
 ## 🧭 Documentation
 
 - 🚀 **[SETUP.md](SETUP.md)** — **Complete Setup & Launch Guide** (Compiling on Windows/macOS, simulation controls, scene catalogue, parameter tuning guide, recording data, troubleshooting).
-
-## Links and references : 
-- [Loges, M., & Weiss, T. (2025). *Simulating Ant Swarm Aggregations Dynamics*](https://doi.org/10.1145/3747868)
-- [Perna, A. et al. (2012). Individual rules for trail pattern formation in Argentine ants](https://doi.org/10.1371/journal.pcbi.1002592)
-
+- 
 ## 📚 References
 
 ### Core References
