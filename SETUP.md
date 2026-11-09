@@ -1,8 +1,57 @@
 # 🚀 Setup & Launch Guide — AntSimulation
 
-This guide explains how to compile and run the simulation on **Windows** and **macOS**.
+This guide is intended for anyone who wants to run, explore, or observe the simulation.
+
+It covers: compiling the project, launching it, understanding the available scenes, and tweaking simulation parameters.
 
 > **Note:** Raylib 4.5 library files are already included in `lib/`. You only need to install a C++ compiler.
+
+---
+
+## What is this simulation?
+
+This project simulates a swarm of ants modeled as physical particles in a 3D environment. Each ant is represented as a sphere with physical properties (mass, velocity, friction, adhesion). The collective behavior — pile formation, flow through funnels, bridge-building — emerges from local physics rules rather than explicit programming.
+
+The simulation is built on **Position-Based Dynamics (PBD)**, the same technique used in real-time physics engines and game engines. Ants interact through:
+- **Density constraints** — they resist being compressed, like a fluid
+- **Distance constraints** — bonding forces that make them stick together
+- **Friction & adhesion** — surface interactions with walls, floors, and 3D objects
+- **Random locomotion** — individual ants randomly change direction, driving movement
+
+> This project extends the original simulation by adding **pheromone-based trail formation**, where ants deposit chemical signals and steer toward higher concentrations — producing the characteristic trails observed in real Argentine ants.
+
+---
+
+## Project Structure
+
+```
+CollectiveBehavior-AntSimulation/
+│
+├── antsim.cpp                   # Entire simulation source code (~2700 lines, C++/Raylib)
+├── settings.txt                 # Simulation parameters — edit this to change behavior
+│
+├── models/                      # 3D scene objects loaded at runtime
+│   ├── funnel.glb               #   Scene 0: Funnel
+│   ├── bracket.glb              #   Scene 1: Bracket
+│   ├── plate.glb                #   Scene 2: Plate (crushing)
+│   ├── coin.glb                 #   Scene 4: Coin Drop
+│   └── tower.glb                #   Scene 5: Ant Tower
+│
+├── lib/                         # Pre-built Raylib 4.5 libraries for Windows 
+│   ├── libraylib.a
+│   ├── libraylibdll.a
+│   └── raylib.dll
+│
+├── lighting.vs / lighting.fs    # GLSL shaders for scene lighting
+├── lighting_instancing.vs       # Shader for rendering many particles efficiently
+├── raylib.h / raymath.h         # Raylib API headers
+├── rlgl.h / rlights.h           # Low-level rendering utilities
+│
+├── README.md                    # Project overview and academic context
+└── SETUP.md                     # This file — setup and usage guide
+```
+
+> **The only files you need to edit** to change behavior are `antsim.cpp` (code) and `settings.txt` (parameters).
 
 ---
 
@@ -111,20 +160,73 @@ clang++ -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -
 
 | Key | Action |
 |-----|--------|
-| `SHIFT` | Toggle between 3D cursor and camera |
-| `WASD` + `QE` | Move the 3D cursor around the scene |
-| `1` / `2` / `3` | Adjust cursor size |
-| `WASD` + Mouse / Scroll | Move camera / Zoom |
-| `IKJL` + `OU` | Resize environment walls |
-| `4` | Switch scene |
-| `5` | Reset simulation |
-| `6` / `7` | Start / stop frame data recording |
-| `8` / `9` | Start / stop FPS/performance recording |
+| `SHIFT` | Toggle between 3D cursor mode and camera mode |
+| `WASD` + `QE` | Move the 3D cursor around the scene (cursor mode) |
+| `1` / `2` / `3` | Adjust cursor size (small / medium / large) |
+| `WASD` + Mouse / Scroll | Move camera / Zoom (camera mode) |
+| `IKJL` + `OU` | Resize the environment walls |
+| `4` | Switch to next scene |
+| `5` | Reset current scene |
+| `6` / `7` | Start / stop recording particle positions to `frames.txt` |
+| `8` / `9` | Start / stop recording FPS data to a `.csv` file |
+| `M` | Print all particle positions to the terminal |
 
-**Available scenes:** Funnel, Bracket, Plate, Dispersal, Coin Drop, Ant Tower, Crushed Ants
+
+## Available Scenes
+
+Press `4` to cycle through scenes. Press `5` to reset the current scene.
+
+| # | Name | Description |
+|---|------|-------------|
+| 0 | **Funnel** | Ants pour through a funnel-shaped obstacle and disperse on the floor below |
+| 1 | **Bracket** | Ants slowly fill three holes in a bracket structure, simulating bridging behavior |
+| 2 | **Plate** | A flat plate descends and compresses a mass of ants (move with `Q`/`E`) |
+| 3 | **Dispersal** | Open arena — ants disperse freely across the floor with no obstacles |
+| 4 | **Coin Drop** | A coin falls and collides with a pile of ants |
+| 5 | **Ant Tower** | Ants accumulate on a tower-shaped structure, crawling along its surface |
+| 6 | **Crushed Ants** | A mass of ants is compressed from above |
+| 7 | **Test Room** | Empty arena — used for pheromone trail experiments |
+
+Each scene has its own physics parameters defined in `settings.txt`.
 
 ---
 
+## Adjusting Parameters
+
+All physics parameters are stored in [`settings.txt`](settings.txt) and are read at runtime — **no recompilation needed** to change them. Simply edit the file, then reset the simulation with `5`.
+
+### Parameter reference
+
+Each scene block follows this exact order (9 values after the scene name):
+
+```
+Scene Name          ← label only, not parsed
+Viscosity           ← how much ants resist relative motion (fluid-like damping)
+Distance Constraint Intensity  ← stiffness of bonds between ants (higher = stiffer)
+Bond Split Distance ← how far apart two bonded ants can be before the bond breaks
+                      (expressed as a multiplier of bond distance, e.g. 2.84 = 2.84×)
+Max Number of Bonds ← maximum bonds per ant (integer, e.g. 3)
+Surface Friction    ← friction between ants and walls/floor
+Adhesive Strength   ← how strongly ants stick to walls and surfaces (0 = no adhesion)
+Particle Friction   ← friction between individual ants colliding with each other
+Timestep            ← simulation time step (smaller = more accurate, but slower)
+Gravity             ← gravitational acceleration (higher = ants fall faster)
+```
+
+### Example — settings.txt excerpt
+
+```
+Funnel (scene 0)
+0.408       ← Viscosity
+0.0308      ← Distance Constraint Intensity
+2.84        ← Bond Split Distance
+3           ← Max Number of Bonds
+0.024       ← Surface Friction
+0.0000      ← Adhesive Strength (none for funnel)
+0.1512      ← Particle Friction
+0.01        ← Timestep
+280.0       ← Gravity
+```
 ## Troubleshooting
 
 | Error | Fix |

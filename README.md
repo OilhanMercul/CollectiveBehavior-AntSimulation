@@ -10,7 +10,6 @@ We extend the Position-Based Dynamics (PBD) ant swarm simulation of Loges & Weis
 | Oïlhan Mercul | [@OilhanMercul](https://github.com/OilhanMercul) |
 | Ljubiša Milovanović | [@Ljubisa-Milovanovic](https://github.com/Ljubisa-Milovanovic) |
 
-
 ## Starting Point :
 
 Our starting point is the following article on ant swarm aggregation dynamics:
@@ -54,6 +53,10 @@ Results will be evaluated using ant turning angles, trail formation over time, t
 - Validate simulated ant behavior against Perna et al.
 - Investigate the effects of ant density and physical collisions on trail formation.
 Analyze and present the results.
+
+## 🧭 Documentation
+
+- 🚀 **[SETUP.md](SETUP.md)** — **Complete Setup & Launch Guide** (Compiling on Windows/macOS, simulation controls, scene catalogue, parameter tuning guide, recording data, troubleshooting).
 
 ## Links and references : 
 - [Loges, M., & Weiss, T. (2025). *Simulating Ant Swarm Aggregations Dynamics*](https://doi.org/10.1145/3747868)
