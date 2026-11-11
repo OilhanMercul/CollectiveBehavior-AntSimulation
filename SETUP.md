@@ -60,8 +60,8 @@ CollectiveBehavior-AntSimulation/
 ### Step 1 — Install the compiler (w64devkit)
 
 1. Download **w64devkit**: https://github.com/skeeto/w64devkit/releases
-   - Get the latest `w64devkit-x.xx.x.zip`
-2. Unzip it anywhere, e.g. `C:\w64devkit\`
+   - Get the latest `w64devkit-x64-x.xx.x.7z.exe`
+2. Run it, it will unzip itself anywhere, e.g. `C:\w64devkit\`
 3. Launch `w64devkit.exe` → a bash terminal opens
 
 > If you already have **MSYS2** or **MinGW** with `g++` available, you can use them directly and skip to Step 2.
