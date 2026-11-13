@@ -38,7 +38,7 @@ Results will be evaluated using ant turning angles, trail formation over time, t
 
 ## Milestone :
 
-[First Report – 13/11/2026]([📄 Read PDF](reports\report_1\Pheromone_Driven_Trail_Formation_in_a_Physics_Based_3D_Ant_Simulator__Literature_Review_and_Implementation_Strategy (2).pdf") | [📂 LaTeX Source](reports/report_1/report_1.tex))
+[First Report – 13/11/2026]([📄 Read PDF](reports\report_1\Pheromone_Driven_Trail_Formation_in_a_Physics_Based_3D_Ant_Simulator__Literature_Review_and_Implementation_Strategy (2).pdf) | [📂 LaTeX Source](reports/report_1/report_1.tex))
 - Understand and reproduce the original simulator.
 - Review relevant literature on pheromone-based behavior and trail formation.
 - Finalize the implementation approach and experimental plan.
