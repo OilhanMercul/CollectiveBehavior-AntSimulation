@@ -1,0 +1,224 @@
+\documentclass[9pt,twoside]{pnas-new}
+% Use the lineno option to display guide line numbers if required.
+
+\articletype{Computer Science}%%%% Article topic/classification
+
+\templatetype{pnasmathematics} % Choose template
+% {pnasresearcharticle} = Template for a two-column research article
+% {pnasmathematics} = Template for a one-column mathematics article
+% {pnasinvited} = Template for a PNAS invited submission
+%\onecolumn
+
+\begin{document}
+
+\title{Pheromone-Driven Trail Formation in a Physics-Based 3D Ant Simulator: Literature Review and Implementation Strategy}
+
+% Use letters for affiliations, numbers to show equal authorship (if applicable) and to indicate the corresponding author
+\author[a,1]{Moira Grozdanić}
+\author[a,b,1]{Raphaël Letourneur}
+\author[a,b,1,2]{Oïlhan Mercul}
+\author[a,1]{Ljubiša Milovanović}
+
+\affil[a]{Faculty of Computer and Information Science, University of Ljubljana, Ljubljana, Slovenia}
+\affil[b]{Department of Computer Science, INSA Lyon, Villeurbanne, France}
+
+
+% Please add a significance statement to explain the relevance of your work
+\significancestatement{Ant trails are an example of self-organization: no ant knows the network's layout, yet a colony builds efficient paths from simple local responses to pheromone. Simulations can easily produce trail-like patterns; the harder question is whether they match what real ants do. We propose to add pheromone communication, using a turning rule measured on live Argentine ants, to an existing physics-based ant simulator, and to compare it with a well-documented experiment in which those ants explored an open arena. This will test how much of a colony's trail network one measured individual rule can explain, and what physical interactions between ants add to it.}
+
+
+% Please include corresponding author, author contribution and author declaration information
+
+
+\equalauthors{\textsuperscript{1}All authors contributed equally to this work.}
+\correspondingauthor{\textsuperscript{2}To whom correspondence should be addressed. E-mail: oilhan.mercul@insa-lyon.fr}
+
+% At least three keywords are required at submission. Please provide three to five keywords, separated by the pipe symbol.
+\keywords{Ant swarm dynamics $|$ Computer simulation $|$ Pheromones $|$ PBD model $|$ 3D simulation }
+
+\begin{abstract}
+Ants build networks of pheromone trails by laying pheromone as they walk and turning toward the pheromone they sense. A recent position-based dynamics (PBD) simulator by Loges and Weiss reproduces the physical behavior of ant aggregations in real time, but its ants do not communicate chemically. Tracking of Argentine ants (\textit{Linepithema humile}) in an open arena has shown that their turning follows Weber's law: the turning angle is proportional to the difference between the pheromone on the left and right, divided by their sum. Combined with directional noise, this rule explains collective trail choices, yet an agent-based simulation built on it produced trails that wound and looped more than real ones. In this report, we review these models, reproduce the PBD simulator, and propose extending it with a pheromone field on the arena floor and the measured turning rule. We describe how we will validate the extension against the open-arena experiment, comparing turning responses, arena occupancy and trail shape, and how we will then test whether physical contacts between ants or path integration close the remaining gap between simulated and real trails.
+\end{abstract}
+
+\dates{This manuscript was compiled on \today}
+%doi{\url{www.pnas.org/cgi/doi/10.1073/pnas.XXXXXXXXXX}}
+
+\maketitle
+\thispagestyle{firststyle}
+\ifthenelse{\boolean{shortarticle}}{\ifthenelse{\boolean{singlecolumn}}{\abscontentformatted}{\abscontent}}{}
+
+\Firstpage
+
+\section{Introduction}
+Ants display two striking forms of collective behavior. In dense aggregations, workers link their bodies and the group behaves as a material with fluid- and solid-like properties \cite{loges2025}. In sparse foraging, colonies build networks of pheromone trails through a self-organized feedback loop: ants lay pheromone as they walk and turn toward sensed gradients \cite{perna2012}. This project bridges these two domains by extending a physical aggregation simulator with chemical trail-following rules.
+
+\subsection{Simulating ant aggregations}
+Loges and Weiss recently introduced a real-time position-based dynamics (PBD) simulator for 3D ant aggregations \cite{loges2025}. Modeled as spherical particles governed by geometric constraints, such as density, viscosity, elasticity bonds, and surface adhesion. The swarm realistically replicates the physical and mechanical properties observed in live ant structures (e.g., blobs, towers, and funnels). However, their framework encodes no chemical communication or high-level behavior, leaving pheromone-based trail following as an open challenge.
+
+\subsection{Models of trail formation}
+Classic models describe ant choice at bifurcations using a non-linear function:
+\begin{equation}
+P_L = \frac{(h+L)^a}{(h+L)^a + (h+R)^a},
+\label{eq:deneubourg}
+\end{equation}
+
+
+where $L$ and $R$ represent left and right pheromone concentrations, $h$ is a threshold, and $a>1$ sets the degree of nonlinearity (Deneubourg et al., reviewed in \cite{perna2012}). While successful at fitting colony-level outcomes in binary bridge experiments, this approach assumes individual ants respond disproportionately to pheromone without capturing actual movement dynamics. Other modeling efforts have explored self-propelled particles or lattice jumps \cite{boissard2013, hartman2024}, but they lack the individual-level sensory detail required for simulation. \Endparasplit
+
+\subsection{A measured individual rule}
+Perna et al.\ directly measured individual response rules in Argentine ants (\textit{Linepithema humile}) exploring an open arena \cite{perna2012}. They showed that ants turn toward pheromone without altering speed, responding to local concentrations within about 1~cm ahead via Weber's law:
+\begin{equation}
+\alpha \propto \frac{L-R}{L+R},
+\label{eq:weber}
+\end{equation}
+where $L$ and $R$ denote front-left and front-right pheromone quantities. Although this linear rule appears to contradict ~\eqref{eq:deneubourg}, directional noise naturally resolves the discrepancy by yielding sigmoidal choice probabilities at bifurcations. However, agent-based simulations implementing this rule produced overly winding and looped trails compared to real experiments, indicating that pheromone response alone is insufficient and suggesting missing mechanisms like path integration \cite{perna2012} or physical inter-ant interactions \cite{dobramysl2025}.
+
+\subsection{Objective}
+These two bodies of work are mutually complementary: Loges and Weiss provide physical interactions without chemistry, whereas Perna et al.\ provide measured chemical responses without physical contact mechanics. We extend the reproduced PBD simulator with a floor-stored pheromone field and the turning rule of ~\eqref{eq:weber}. We first validate our simulation against the open-arena experiment (turning response, population dynamics, trail timing and morphology). We then use the validated framework to test whether physical contact constraints or path integration bridge the remaining gap between simulated and real trail structures.
+
+
+
+
+\section{Methods}
+We extend the PBD simulator of Loges and Weiss \cite{loges2025} with pheromone deposition, pheromone sensing and the turning rule of Perna et al.\ \cite{perna2012}, and configure it to reproduce the open-arena experiment of \cite{perna2012}. All parameters are listed in Table~\ref{tab:params}.
+
+\subsection{Baseline simulator}
+We keep the physical model of Loges and Weiss unchanged \cite{loges2025}. Each ant is a particle of radius $r$ and mass $m=1$. At each time step, a velocity planner sets the velocity of every ant, positions are predicted with a forward Euler step, and the predicted positions are corrected over a fixed number of solver iterations by constraints for density, viscosity, ant--ant bonds, ant--ant contact with friction and the domain boundary. Collisions with rigid bodies are resolved after the solver, and velocities are recovered from the corrected displacements and limited to a maximum speed (Algorithm~\ref{alg:loop}). The density and viscosity constraints act only on ants that are not exploring and have at least 15 neighbors \cite{loges2025}. We also disable bonds and surface adhesion for exploring ants, so that in the sparse open arena the only physical interaction between ants is contact.
+
+\begin{algorithm}[H]
+\caption{Simulation loop. Lines marked $\star$ are our additions to the loop of Loges and Weiss \cite{loges2025}.}
+\label{alg:loop}
+\begin{algorithmic}[1]
+    \For{each ant $i$}
+        \If{$i$ is exploring \textbf{and} $t$ is a multiple of $\tau$} \Comment{$\star$}
+            \State Sense $L_i, R_i$ and rotate heading $\mathbf{u}_i$ by $\alpha_i$ (Eq.~\ref{eq:turn}) \Comment{$\star$}
+        \EndIf
+        \State Compute $\mathbf{v}_i$ from the velocity planner (Eq.~\ref{eq:velocity})
+        \State $\mathbf{x}^*_i \gets \mathbf{x}_i + \Delta t\,\mathbf{v}_i$
+    \EndFor
+    \State Compute nearest neighbors
+    \While{$iter < \text{SolverIterations}$}
+        \State Apply density and viscosity constraints
+        \State Project distance (bond) constraints
+        \State Resolve ant--ant contacts with friction
+        \State Keep ants within the arena
+    \EndWhile
+    \State Resolve ant--rigid body collisions
+    \For{each ant $i$}
+        \State $\mathbf{v}_i \gets \text{clamp}\big(s_{\max}, k_{\text{limit}}(\mathbf{x}^*_i - \mathbf{x}_i)/\Delta t\big)$
+        \State $\mathbf{x}_i \gets \mathbf{x}^*_i$
+    \EndFor
+    \State Deposit pheromone under each ant on the floor; apply evaporation \Comment{$\star$}
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Velocity planner with pheromone}
+In the original planner, an exploring ant on a surface moves at a preferred speed $s$ along a heading that is perturbed by a random angle at every step \cite{loges2025}. We replace this perturbation with the turning rule used in the simulation of Perna et al.\ \cite{perna2012}. Every $\tau = 0.4$~s, each exploring ant rotates its heading $\mathbf{u}_i$ in the floor plane by
+\begin{equation}
+\alpha_i = A\,\frac{L_i - R_i + \epsilon_1}{L_i + R_i} + \epsilon_2,
+\label{eq:turn}
+\end{equation}
+where $L_i$ and $R_i$ are the pheromone quantities sensed in the left and right sectors, $A$ is the turning gain, and $\epsilon_1 \sim \mathcal{N}(0,\sigma_1^2)$ and $\epsilon_2 \sim \mathcal{N}(0,\sigma_2^2)$ are noise terms on the perceived pheromone difference and on the turning angle, with $\sigma_1 = 50$ pheromone units and $\sigma_2 = 15^\circ$ \cite{perna2012}. Positive angles are turns to the left. Without $\epsilon_1$, ~\eqref{eq:turn} reduces to Weber's law (~\eqref{eq:weber}); because the contribution of $\epsilon_1$ grows as $L_i + R_i$ decreases, ants on weakly marked ground turn almost at random. Perna et al.\ do not report the value of $A$ used in their simulation. We use $A = 30.8^\circ$, the value they obtained by fitting $\alpha = A_0 (L-R)/(L+R+T_0)$ to all their data without evaporation. ~\eqref{eq:turn} is undefined when $L_i + R_i = 0$; in that case we draw a new heading uniformly at random, which is the limit of ~\eqref{eq:turn} as $L_i + R_i \to 0$. Between updates the heading is constant. As in the implementation of Loges and Weiss, the horizontal velocity is set to the preferred speed along the heading rather than incremented, and only the vertical component is affected by gravity; this also keeps the speed fixed, consistent with the finding that walking speed does not depend on pheromone \cite{perna2012}:
+\begin{equation}
+\mathbf{v}_i \gets s\,\mathbf{u}_i + \left(v_{i,y} - \Delta t\, g\right)\mathbf{e}_y,
+\label{eq:velocity}
+\end{equation}
+where $\mathbf{e}_y$ is the vertical unit vector.
+
+\subsection{Pheromone field and sensing}
+Trail pheromone is laid on the substrate, so we store the pheromone field $c$ on the arena floor as a grid of 1~mm cells, the patch size used by Perna et al.\ \cite{perna2012}. Because $\sigma_1$ in ~\eqref{eq:turn} is expressed in pheromone units, we keep their scale exactly: each ant on the floor adds $q\,\Delta t$ to the cell beneath it at every step, with $q = 1$~unit/s, equivalent to their 0.1 units per 0.1~s step. Perna et al.\ do not mention evaporation in their simulation, so we run without evaporation by default and repeat each configuration with a half-life of 30~min, the lower bound they considered in their analysis, applied as $c \gets c \cdot 2^{-\Delta t / t_{1/2}}$. As in their model, the field does not diffuse.
+
+The ant senses pheromone in two circular sectors of radius $\rho = 2$~cm, each $45^\circ$ wide and centered $45^\circ$ to the left and right of its heading, as in the simulation of \cite{perna2012}. $L_i$ is the sum of $c$ over the cells whose centers lie in the left sector, and $R_i$ the same sum over the right sector.
+
+\subsection{Open-arena setup}
+We reproduce the arena and simulation protocol of \cite{perna2012}. The arena is a disk 1~m in diameter with the nest entrance at its center. A colony of 1{,}000 ants starts in the nest, and each ant enters the arena with probability $1/1000$ per 0.1~s. Ants that walk into the border align with it, choosing the direction that requires the smallest change of heading. Each ant receives a return label with a rate of one per 10~min; a labeled ant that comes within 2~cm of the entrance heads directly to it and returns to the nest. Each trial lasts one hour, and we run 12 trials with different random seeds, matching the 12 experimental trials.
+
+To convert between simulator units and physical units, we set 1~cm to 60 simulator units, so that the preferred speed of Loges and Weiss, 120 units/s, equals the mean walking speed of 2~cm/s measured by Perna et al. We run every trial in two configurations: with ant--ant contacts disabled, which reproduces the non-interacting agents of \cite{perna2012}, and with contacts enabled.
+
+\subsection{Comparison with the experiment}
+We compare the simulation with three measurements reported by Perna et al.\ \cite{perna2012}:
+\begin{enumerate}
+    \item \textbf{Turning response.} We apply their tracking analysis to the simulated ants: every 0.8~s, each ant is followed over two consecutive 0.4~s intervals, giving a turning angle; ants moving less than 0.4~cm in either interval are discarded. $L$ and $R$ are measured in $90^\circ$ front sectors of radius 1~cm, on the pheromone map from 16~s earlier. We then fit $\alpha = A_0 (L-R)/(L+R+T_0)$ and compare the fitted values with theirs ($A_0 = 30.80$, $T_0 = 10.53$ without evaporation).
+    \item \textbf{Arena occupancy.} The number of ants in the arena, and within 2.5~cm of its border, over time.
+    \item \textbf{Trail patterns.} Images obtained by summing 300 snapshots taken 1~s apart, as in their figures, from which we compare when trails appear and their shape.
+\end{enumerate}
+The first comparison checks the implementation, since the simulated ants follow the rule by construction; the second and third test whether the rule, with or without contacts, reproduces the collective behavior.
+
+\begin{table}[t]
+\centering
+\caption{Simulation parameters. 1~cm = 60 simulator units.}
+\label{tab:params}
+\begin{tabular}{lll}
+\toprule
+Parameter & Value & Source \\
+\midrule
+Time step $\Delta t$; solver iterations & 0.01~s; 4 & \cite{loges2025} \\
+Ant radius $r$ & 7 units & \cite{loges2025} \\
+Walking speed $s$ & 120 units/s (2~cm/s) & \cite{loges2025,perna2012} \\
+Heading update interval $\tau$ & 0.4~s & \cite{perna2012} \\
+Turning gain $A$ & $30.8^\circ$ & \cite{perna2012} \\
+Noise $\sigma_1$; $\sigma_2$ & 50 units; $15^\circ$ & \cite{perna2012} \\
+Sensing sectors & $2 \times 45^\circ$ at $\pm 45^\circ$, $\rho = 2$~cm & \cite{perna2012} \\
+Pheromone grid cell & 1~mm & \cite{perna2012} \\
+Deposition rate $q$ & 1 unit/s per 1~mm cell & \cite{perna2012} \\
+Evaporation half-life $t_{1/2}$ & none (default); 30~min & \cite{perna2012} \\
+Arena diameter & 1~m & \cite{perna2012} \\
+Colony size; entry probability & 1{,}000; $1/1000$ per 0.1~s & \cite{perna2012} \\
+Return label rate; return radius & 1 per 10~min; 2~cm & \cite{perna2012} \\
+Trial duration; trials & 1~h; 12 & \cite{perna2012} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+\section{Results}
+
+\subsection{Reproduction of the baseline simulator}
+We compiled the public implementation of Loges and Weiss \cite{loges2025} on Windows with the w64devkit toolchain and raylib, following the instructions of the repository, and ran all of the scenes: funnel, bracket, plate, dispersal, coin drop, ant tower and crush. The implementation renders each ant as a sphere; the realistic ants shown in the published figures were rendered separately in Unity \cite{loges2025}, and that rendering pipeline is not part of the repository. Table~\ref{tab:fps} compares the frame rates we measured on an AMD Ryzen 7 7735 HS with those reported for 8{,}500 particles on an Intel i7-11370H. The comparison is only indicative, since hardware and rendering differ.
+
+\begin{table}[t]
+\centering
+\caption{Frame rates of the baseline simulator: reported by Loges and Weiss \cite{loges2025} and measured in our reproduction.}
+\label{tab:fps}
+\begin{tabular}{lcc}
+\toprule
+Scene & Reported FPS & Our FPS \\
+\midrule
+Funnel    & 18.9 & 16  \\
+Bracket   & 51.1 & 21  \\
+Plate     & 33.3 & 22  \\
+Dispersal & 36.1 & 26  \\
+Coin drop & 24.2 & 16  \\
+Ant tower & 28.8 & 20  \\
+Crush     & 28.9 & 20  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Exploration in the paper and in the implementation}
+Because our extension replaces the exploration rule, we compared its description in the paper with the code. The paper describes exploration as a velocity increment along a heading perturbed by an angle sampled uniformly in $[-10^\circ, 10^\circ]$ \cite{loges2025}. In the implementation, an exploring ant on the floor instead turns by exactly $\pm 10^\circ$ with probability $1/5$ at each step, and its horizontal velocity is replaced by $s\,\mathbf{u}_i$ rather than incremented. With $\Delta t = 0.01$~s, this random walk accumulates a turning-angle standard deviation of about $28^\circ$ over 0.4~s (40 steps, each with variance $0.2 \times 10^2$~deg$^2$), close to the typical standard deviation of about $35^\circ$ that Perna et al.\ measured over the same interval \cite{perna2012}. Our velocity planner (~\eqref{eq:velocity}) follows the implementation in setting, rather than incrementing, the horizontal velocity.
+
+
+
+
+
+
+\section{Discussion}
+Our comparison with Perna et al.\ isolates the effect of the measured turning rule from physical crowding. With contacts disabled, our simulation replicates their setup and should reproduce their reported discrepancies, trails that appear earlier, wind more, and form more loops than in experiments \cite{perna2012}. Enabling contacts introduces physical interactions as the sole variable, allowing any shift in arena occupancy or trail morphology to be attributed to crowding, particularly near the high-density arena border where real loops typically form \cite{perna2012}.
+
+Several limitations arise from the available data. First, the turning rule was derived exclusively from isolated ants \cite{perna2012}, so enabling contacts assumes that sensory turning and physical collisions simply superpose. Second, lacking experimental measurements at the arena boundary, border alignment relies on an assumption despite over half the ants clustering within 2.5~cm of the wall at peak occupancy \cite{perna2012}. Third, because the original simulation's turning gain is unreported, we adopt the fitted value $A_0$ and will test its sensitivity. Fourth, in ~\eqref{eq:turn} the noise $\epsilon_1$ is divided by $L_i+R_i$, so on weakly marked ground ants turn by large random angles, well above the typical spread of about $35^\circ$ measured by Perna et al.\ \cite{perna2012}. We will therefore also test the variant they fitted to their data, $\alpha = A_0 (L-R)/(L+R+T_0) + \epsilon_2$ with $T_0 = 10.53$, in which an ant on unmarked ground keeps its heading apart from the noise $\epsilon_2$. Fifth, because Perna et al.\ provide trail images rather than morphological metrics, trail shapes can only be assessed qualitatively alongside quantitative occupancy curves. Finally, modeling ants as spheres only approximates true body geometry and contact mechanics \cite{loges2025}.
+
+For the second report (11 December), we will implement the pheromone grid, sensing, and turning rule to perform the baseline comparison. For the final report (8 January), we will evaluate mechanisms that straighten simulated trails: path integration which introduces long-timescale anti-correlations in turning angles \cite{perna2012} and inter-ant contacts, including modeling stopped individuals as obstacles to explore traffic regulation \cite{dobramysl2025}.
+
+\dataavail{The baseline simulator of Loges and Weiss is available at \url{https://github.com/mwl-6/AntSwarmDynamics}. Our extension, analysis scripts and the source of this report are available at \url{https://github.com/OilhanMercul/CollectiveBehavior-AntSimulation}.}
+
+
+% Bibliography
+\bibliography{pnas-sample}
+
+\end{document}
